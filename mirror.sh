@@ -5,11 +5,11 @@ function download {
   cd latest || exit
   wget -N https://sb.ltn.fi/database/categoryVotes.csv
   wget -N https://sb.ltn.fi/database/noSegments.csv
-  wget -N https://sb.ltn.fi/database/sponsorTimes.csv
   wget -N https://sb.ltn.fi/database/userNames.csv
   wget -N https://sb.ltn.fi/database/vipUsers.csv
   wget -N https://sb.ltn.fi/database/warnings.csv
   wget -N https://sb.ltn.fi/database/lockCategories.csv
+  wget -N https://sb.ltn.fi/database/sponsorTimes.csv
   cd ..
 }
 
