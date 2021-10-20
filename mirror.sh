@@ -9,6 +9,7 @@ function download {
   wget -N https://sb.ltn.fi/database/warnings.csv
   wget -N https://sb.ltn.fi/database/lockCategories.csv
   wget -N https://sb.ltn.fi/database/sponsorTimes.csv
+  wget -N https://sponsor.ajay.app/database/videoInfo.csv
   cd ..
 }
 
