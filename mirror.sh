@@ -3,13 +3,13 @@ cd /var/www/sponsorblock || exit
 
 function download {
   cd latest || exit
-  wget -N https://sb.ltn.fi/database/categoryVotes.csv
-  wget -N https://sb.ltn.fi/database/userNames.csv
-  wget -N https://sb.ltn.fi/database/vipUsers.csv
-  wget -N https://sb.ltn.fi/database/warnings.csv
-  wget -N https://sb.ltn.fi/database/lockCategories.csv
-  wget -N https://sb.ltn.fi/database/sponsorTimes.csv
-  wget -N https://sponsor.ajay.app/database/videoInfo.csv
+  wget -N --header='Accept-Encoding: gzip' https://sponsor.ajay.app/database/videoInfo.csv
+  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/categoryVotes.csv
+  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/userNames.csv
+  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/vipUsers.csv
+  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/warnings.csv
+  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/lockCategories.csv
+  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/sponsorTimes.csv
   cd ..
 }
 
