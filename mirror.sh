@@ -2,22 +2,16 @@
 cd /var/www/sponsorblock || exit
 
 function download {
-  cd latest || exit
-  wget -N --header='Accept-Encoding: gzip' https://sponsor.ajay.app/database/videoInfo.csv
-  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/categoryVotes.csv
-  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/userNames.csv
-  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/vipUsers.csv
-  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/warnings.csv
-  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/lockCategories.csv
-  wget -N --header='Accept-Encoding: gzip' https://sb.ltn.fi/database/sponsorTimes.csv
-  cd ..
-}
-
-function archive {
-  # get date
-  fileDate=$(date -r latest/vipUsers.csv +%F_%H-%M)
-  tar --zstd -cf "mirror/$fileDate.tar.zst" latest/*
+  URL=sponsor.ajay.app
+  # download from main server so get filenames
+  curl -s -L $URL/database.json?generate=false -o response.json
+  DUMP_DATE=$(cat response.json | jq .lastUpdated)
+  tables=$(cat response.json | jq -r .links[].table)
+  # set $@ since posix doesn't have named variables
+  for table in $tables
+  do
+    rsync -ztvP --zc=lz4 --append rsync://$URL/sponsorblock/${table}_${DUMP_DATE}.csv latest/${table}.csv
+  done
 }
 
 download
-archive
