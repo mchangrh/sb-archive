@@ -12,6 +12,8 @@ function download {
   do
     rsync -ztvP --zc=lz4 --append rsync://$URL/sponsorblock/${table}_${DUMP_DATE}.csv latest/${table}.csv
   done
+  rm response.json
+  echo $DUMP_DATE > lastUpdate
 }
 
 download
