@@ -16,4 +16,11 @@ function download {
   echo $DUMP_DATE > lastUpdate.txt
 }
 
+function validate {
+  for file in latest/*.csv
+  do csvlint $file && echo $file is valid || rm $file; done
+  download
+}
+
 download
+validate
