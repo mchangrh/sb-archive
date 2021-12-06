@@ -1,0 +1,13 @@
+5 minute mirror of the SponsorBlock database (https://sponsor.ajay.app)
+
+SponsorBlock data licenced and used under CC BY-NC-SA 4.0 from https://sponsor.ajay.app
+
+files: https://sb-mirror.mchang.xyz/mirror
+last update (UTC): https://sb-mirror.mchang.xyz/mirror/lastUpdate.txt
+
+Usage:
+```
+docker run --rm -it -v "${PWD}/sb-mirror:/mirror" -e "MIRROR_URL=sb-mirror.mchang.xyz" mchangrh/sb-mirror:alpine
+
+rsync -crztvP --zc=lz4 --cc=xxh3 --append --contimeout=3 --exclude='*.txt' rsync://sb-mirror.mchang.xyz/sponsorblock ./sb-mirror
+```

@@ -10,7 +10,7 @@ once size becomes a considerable issue, they will be moved off-site or archived 
 
 Usage:
 ```
-docker run --rm -it -v "${PWD}/sb-mirror:/mirror" mchangrh/sb-mirror:alpine -e "MIRROR_URL=sb-archive.mchang.xyz"
+docker run --rm -it -v "${PWD}/sb-mirror:/mirror" -e "MIRROR_URL=sb-mirror.mchang.xyz" mchangrh/sb-mirror:alpine
 
-rsync -crztvP --zc=lz4 --cc=xxh3 --append --contimeout=3 rsync://sb-archive.mchang.xyz/sponsorblock ./sb-mirror
+rsync -crztvP --zc=lz4 --cc=xxh3 --append --contimeout=3 --exclude='*.txt' rsync://sb-archive.mchang.xyz/sponsorblock ./sb-mirror
 ```
