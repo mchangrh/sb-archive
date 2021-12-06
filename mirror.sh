@@ -1,51 +1,23 @@
-#!/bin/bash
-cd /var/www/sponsorblock || exit
+#!/bin/sh
+MIRROR_DIR="/root/sb-mirror/mirror"
 
-function download {
-  URL=sponsor.ajay.app
-  # download from main server so get filenames
-  curl -sL $URL/database.json?generate=false -o response.json
+download() {
+  # get filenames
+  curl -sL https://sponsor.ajay.app/database.json?generate=false -o response.json
   DUMP_DATE=$(jq .lastUpdated < response.json)
-  tables=$(jq -r .links[].table < response.json)
   # set $@ since posix doesn't have named variables
-  for table in $tables
-  do
-    rsync -aztvP --zc=lz4 --append rsync://$URL/sponsorblock/"${table}"_"${DUMP_DATE}".csv latest/"${table}".csv
-  done
+  set -- $(jq -r .links[].table < response.json)
   rm response.json
-  echo "$DUMP_DATE" > latest/lastUpdate.txt
-}
 
-function download_invalid {
-  URL=sponsor.ajay.app
-  # download from main server so get filenames
-  curl -sL $URL/database.json?generate=false -o response.json
-  DUMP_DATE=$(jq .lastUpdated < response.json)
-  tables=$(jq -r .links[].table < response.json)
-  # set $@ since posix doesn't have named variables
-  for table in $tables
+  for table in "$@"
   do
-    rsync -aztvP --zc=lz4 --append --ignore-existing rsync://$URL/sponsorblock/"${table}"_"${DUMP_DATE}".csv latest/"${table}".csv
+    echo "Downloading $table.csv"
+    rsync -cztvP --zc=lz4 --cc=xxh3 --append --contimeout=10 rsync://rsync.sponsor.ajay.app/sponsorblock/"${table}"_"${DUMP_DATE}".csv "${MIRROR_DIR}"/"${table}".csv ||
+      curl --compressed -L https://sponsor.ajay.app/download/"${table}".csv?generate=false -o "${MIRROR_DIR}"/"${table}".csv
+    # run to validate
+    rsync -cztvP --zc=lz4 --cc=xxh3 --append --contimeout=3 rsync://rsync.sponsor.ajay.app/sponsorblock/"${table}"_"${DUMP_DATE}".csv "${MIRROR_DIR}"/"${table}".csv
   done
-  rm response.json
-  echo "$DUMP_DATE" > latest/lastUpdate.txt
-}
-
-function validate {
-  FAIL=0
-  for file in latest/*.csv; do
-    if ! csvlint "$file"; then
-      rm "$file"
-      FAIL=1
-    fi
-  done
-  echo $FAIL
-  if [ $FAIL -eq 1 ]; then
-    FAIL=0
-    echo "Downloading failed files"
-    download_invalid
-  fi
+  date -d@"$(echo "$DUMP_DATE" | cut -c 1-10)" +%F_%H-%M > "${MIRROR_DIR}"/lastUpdate.txt
 }
 
 download
-validate
