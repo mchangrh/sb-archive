@@ -22,7 +22,7 @@ cleanup_archive() {
   # move files to archive dir
   mv $STAGING_DIR/*.csv $STAGING_DIR/"$fileDate"
   # ship to archive
-  rclone move --delete-empty-src-dirs $STAGING_DIR archive:/sb-archive/"$fileDate"
+  rclone move --delete-empty-src-dirs $STAGING_DIR/"$fileDate" archive:/sb-archive/"$fileDate"
 }
 
 download() {
