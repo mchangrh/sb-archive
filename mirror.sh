@@ -13,16 +13,7 @@ cleanup_archive() {
   # rm files with size 0
   find $STAGING_DIR -size 0 -exec rm {} \;
   # files have size, move over
-  mv $STAGING_DIR/sponsorTimes.csv.zst $MIRROR_DIR
-  mv $STAGING_DIR/lastUpdate.txt $MIRROR_DIR
-  cp -a $STAGING_DIR/*.csv $MIRROR_DIR
-  # create archive dir
-  fileDate=$(date -r $STAGING_DIR/vipUsers.csv +%F_%H-%M)
-  mkdir $STAGING_DIR/"$fileDate"
-  # move files to archive dir
-  mv $STAGING_DIR/*.csv $STAGING_DIR/"$fileDate"
-  # ship to archive
-  rclone move --delete-empty-src-dirs $STAGING_DIR/"$fileDate" archive:/sb-archive/"$fileDate"
+  mv $STAGING_DIR/* $MIRROR_DIR
 }
 
 download() {
