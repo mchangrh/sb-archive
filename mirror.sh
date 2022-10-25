@@ -12,6 +12,8 @@ prepare() {
 cleanup_archive() {
   # rm files with size 0
   find $STAGING_DIR -size 0 -exec rm {} \;
+  # remove "html" files
+  find . -type f -exec file --mime-type {} + | awk -F: '$(NF) ~ "html" {print $1}' | xargs rm
   # files have size, move over
   mv $STAGING_DIR/* $MIRROR_DIR
 }
