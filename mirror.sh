@@ -30,7 +30,7 @@ download() {
   do
     echo "Downloading $table.csv"
     rsync -tvP --contimeout=10 rsync://rsync.sponsor.ajay.app:31111/sponsorblock/"${table}"_"${DUMP_DATE}".csv "${STAGING_DIR}"/"${table}".csv ||
-      curl --compressed -L https://sponsor.ajay.app/download/"${table}".csv?generate=false -o "${STAGING_DIR}"/"${table}".csv
+      curl --compressed -L https://sponsor.ajay.app/database/"${table}".csv?generate=false -o "${STAGING_DIR}"/"${table}".csv
     # run to validate
     rsync -tvP --contimeout=3 rsync://rsync.sponsor.ajay.app:31111/sponsorblock/"${table}"_"${DUMP_DATE}".csv "${STAGING_DIR}"/"${table}".csv
   done
