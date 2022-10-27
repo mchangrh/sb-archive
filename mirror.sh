@@ -1,6 +1,6 @@
 #!/bin/sh
-MIRROR_DIR="/var/sb-mirror/mirror"
-STAGING_DIR="/var/sb-mirror/staging"
+MIRROR_DIR="/home/sb-mirror/mirror"
+STAGING_DIR="/home/sb-mirror/staging"
 
 prepare() {
   # set up staging dir
@@ -35,7 +35,7 @@ download() {
     rsync -tvP --contimeout=3 rsync://rsync.sponsor.ajay.app:31111/sponsorblock/"${table}"_"${DUMP_DATE}".csv "${STAGING_DIR}"/"${table}".csv
   done
   date -d@"$(echo "$DUMP_DATE" | cut -c 1-10)" +%F_%H-%M > "${STAGING_DIR}"/lastUpdate.txt
-  date -d@"$(echo "$DUMP_DATE" | cut -c 1-10)" +%F_%H-%M >> /var/log/sb-mirror-updates.log
+  date -d@"$(echo "$DUMP_DATE" | cut -c 1-10)" +%F_%H-%M >> /home/sb-mirror-updates.log
   # compress sponsorTimes
   zstd "${STAGING_DIR}"/sponsorTimes.csv -f1
 }
