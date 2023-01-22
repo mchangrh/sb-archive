@@ -1,12 +1,12 @@
 #!/bin/sh
-MIRROR_DIR="/home/sb-mirror/mirror"
-STAGING_DIR="/home/sb-mirror/staging"
+MIRROR_DIR="/mnt/sb-mirror/mirror"
+STAGING_DIR="/mnt/sb-mirror/staging"
 
 prepare() {
   # set up staging dir
   rm $STAGING_DIR/*.*
   # copy files over for rsync
-  cp -a $MIRROR_DIR/* $STAGING_DIR
+  cp -a $MIRROR_DIR/* $STAGING_DIR --reflink=always
 }
 
 cleanup_archive() {
