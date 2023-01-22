@@ -36,6 +36,7 @@ download() {
   date -d@"$(echo "$DUMP_DATE" | cut -c 1-10)" +%F_%H-%M >> /var/log/sb-mirror-updates.log
   # compress sponsorTimes
   zstd "${STAGING_DIR}"/sponsorTimes.csv -f1
+  gzip "${STAGING_DIR}"/sponsorTimes.csv --fast
 }
 prepare
 download
