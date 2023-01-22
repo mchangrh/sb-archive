@@ -16,6 +16,8 @@ cleanup_archive() {
   find $STAGING_DIR -type f -exec file --mime-type {} + | awk -F: '$(NF) ~ "html" {print $1}' | xargs rm
   # files have size, move over
   mv $STAGING_DIR/* $MIRROR_DIR
+  # chmod files to avoid access denied
+  chmod -R 775 $MIRROR_DIR
 }
 
 download() {
